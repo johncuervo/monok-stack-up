@@ -2,13 +2,38 @@ services:
   db:
     container_name: monok-db
     profiles: ["monok-back"]
-   
+    image: postgres:16-alpine
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - local-backend
   customer-monok:
     restart: always
     stdin_open: true
     tty: true
     container_name: customer-monok
     profiles: ["monok-back"]
+    build:
+      context: ./customer_monok
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -p 3000 -b 0.0.0.0"
+    environment:
+      DB_NAME: customer_monok_development
+    env_file:
+      - .env 
+    volumes:
+      - ./customer_monok:/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+      - rabbitmq
+    networks:
+      - local-backend
     
   order-monok:
     restart: always
@@ -16,12 +41,36 @@ services:
     tty: true
     container_name: order-monok
     profiles: ["monok-back"]
-    
+    build:
+      context: ./order_monok
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -p 3001 -b 0.0.0.0"
+    environment:
+      DB_NAME: order_monok_development
+    env_file:
+      - .env
+    volumes:
+      - ./order_monok:/app
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+      - rabbitmq
+    networks:
+      - local-backend
+
   rabbitmq:
     container_name: monok-rabbitmq
+    image: "rabbitmq:3-management"
     profiles: ["monok-back"]
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+    - local-backend
 
 volumes:
+  db_data:
 
 networks:
- 
+  local-backend:
+    name: local-backend
