@@ -7,6 +7,12 @@ module Api
       end
 
       def create
+        order = ::OrderCreator.create(order_params)
+        render json: order, status: :created
+      rescue ::CustomerService::CustomerNotFoundError
+        render json: { error: "Customer not found" }, status: :not_found
+      rescue StandardError => e
+        render json: { error: e.message }, status: :unprocessable_entity
       end
 
       private
