@@ -1,0 +1,27 @@
+services:
+  db:
+    container_name: monok-db
+    profiles: ["monok-back"]
+   
+  customer-monok:
+    restart: always
+    stdin_open: true
+    tty: true
+    container_name: customer-monok
+    profiles: ["monok-back"]
+    
+  order-monok:
+    restart: always
+    stdin_open: true
+    tty: true
+    container_name: order-monok
+    profiles: ["monok-back"]
+    
+  rabbitmq:
+    container_name: monok-rabbitmq
+    profiles: ["monok-back"]
+
+volumes:
+
+networks:
+ 
