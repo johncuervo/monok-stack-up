@@ -27,6 +27,14 @@ POSTGRES_HOST=
 POSTGRES_USERNAME=
 POSTGRES_PASSWORD=
 
+# RabbitMQ configuration
+RABBIT_HOST=
+RABBIT_PORT=
+RABBIT_VHOST=
+RABBIT_USER=
+RABBIT_PASSWORD=
+```
+
 ### 3️⃣ Start Services with Docker Compose
 Run the following command:
 ```sh
@@ -69,3 +77,70 @@ To fix this kind of error, it is necessary to stop and remove all old containers
 After performing these steps, try starting the Docker profile again.
 
 ---
+
+### 4️⃣ Enable event listener in Customer Service
+
+Run the following command to start the event consumer in Customer Service:
+
+```sh
+docker exec -it customer-monok rails runner 'OrderCreatedConsumer.start'
+```
+
+### 5️⃣  Test order creation flow
+
+Now you can test the order creation flow using the Postman collection located in the project root.
+
+## ✅ Running Tests
+To run **unit and integration tests** with **RSpec**, use:
+```sh
+docker exec -it customer-monok rspec 
+```
+```sh
+docker exec -it order-monok rspec 
+```
+
+## 🔗 Microservices Relationship
+
+### 📌 General Architecture
+The **Customer** and **Order** services are decoupled and communicate via RabbitMQ events.
+
+1. **System creates an order** → Order Service receives the request.
+2. **Order Service validates the customer** → Sends a GET request to Customer Service.
+3. **If the customer exists**, Order Service creates the order in the database.
+4. **Order Service publishes an `orders.created` event** to RabbitMQ.
+5. **Customer Service consumes the event** and updates the customer’s `orders_count`.
+
+### 📊 Interaction Diagram
+
+```mermaid
+graph TD;
+    Client-->Order_Service;
+    Order_Service-->Customer_Service[Validate Customer];
+    Order_Service-->|Event orders.created| RabbitMQ;
+    RabbitMQ-->|Event consumed| Customer_Service[Update orders_count];
+```
+
+---
+
+## 🏗️ Architecture and Event Flow
+- **Decoupling**: Services do not depend directly on each other; they use events.
+- **Scalability**: More consumers can be added without affecting existing services.
+- **Resilience**: If a service fails, the event remains in RabbitMQ until reprocessed.
+
+---
+
+## 🔧 Available Endpoints
+
+### 📌 Customer Service
+| Method | Endpoint | Description |
+|--------|---------|-------------|
+| GET | `api/v1/customers/:id` | Retrieves customer information |
+
+### 📌 Order Service
+| Method | Endpoint | Description |
+|--------|---------|-------------|
+| GET | `api/v1/orders?customer_id=1` | Retrieves customer orders |
+| POST | `api/v1/orders` | Creates a new order |
+
+---
+

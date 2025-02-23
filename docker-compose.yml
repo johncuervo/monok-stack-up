@@ -46,6 +46,7 @@ services:
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -p 3001 -b 0.0.0.0"
     environment:
       DB_NAME: order_monok_development
+      CUSTOMER_SERVICE_URL: http://customer-monok:3000
     env_file:
       - .env
     volumes:
