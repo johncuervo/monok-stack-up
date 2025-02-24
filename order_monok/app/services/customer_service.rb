@@ -29,9 +29,7 @@ class CustomerService
     end
 
     def service_url
-      ENV.fetch("CUSTOMER_SERVICE_URL") do
-        raise ServiceError, "CUSTOMER_SERVICE_URL not configured"
-      end
+      ENV.fetch("CUSTOMER_SERVICE_URL", nil)
     end
 
     # Handles the response from the customer service API based on the status code
@@ -44,6 +42,20 @@ class CustomerService
       else
         handle_error_response(response)
       end
+    end
+
+    def handle_error_response(response)
+      error_message = "Customer service error: #{response.status}"
+      error_message += " - #{response.body['error']}" if response.body&.key?("error")
+
+      Rails.logger.error(error_message)
+
+      raise ServiceError, error_message
+    end
+
+    def handle_connection_error(error)
+      Rails.logger.error("Connection error: #{error.message}")
+      raise ServiceError, "Service is unavailable"
     end
   end
 end

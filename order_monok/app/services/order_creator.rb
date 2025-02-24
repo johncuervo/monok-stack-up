@@ -15,7 +15,7 @@ class OrderCreator
   private
 
   def validate_customer
-    @customer_data = CustomerService.get_customer(@order_params[:customer_id])
+    @customer_data = CustomerService.get_customer(@order_params[:customer_id].to_i)
   end
 
   def create_order

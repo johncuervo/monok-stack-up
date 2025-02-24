@@ -19,7 +19,7 @@ module Messaging
         content_type: "application/json"
       )
     ensure
-      channel&.close if channel&.open?
+      channel.close if channel.open?
     end
 
     private
