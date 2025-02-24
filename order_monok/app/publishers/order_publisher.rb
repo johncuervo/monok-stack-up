@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# Publishes order-related events to the messaging system.
+# Sends an "orders.created" event when a new order is created.
 class OrderPublisher
   EXCHANGE_NAME = "orders".freeze
 

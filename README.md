@@ -40,6 +40,8 @@ Run the following command:
 ```sh
 docker-compose --profile monok-back up --build
 ```
+This will create databases, migrations and seeds for each service.
+
 This will start:
 - **Customer Service** at `http://localhost:3001`
 - **Order Service** at `http://localhost:3002`
@@ -97,6 +99,15 @@ docker exec -it customer-monok rspec
 ```
 ```sh
 docker exec -it order-monok rspec 
+```
+
+## ✅ Running Rubocop
+To run **Rubocop** use:
+```sh
+docker exec -it customer-monok bin/rubocop --parallel
+```
+```sh
+docker exec -it order-monok bin/rubocop --parallel 
 ```
 
 ## 🔗 Microservices Relationship

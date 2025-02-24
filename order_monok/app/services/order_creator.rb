@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Responsible for creating orders, ensuring the customer exists before proceeding.
 class OrderCreator
   def initialize(order_params)
     @order_params = order_params

@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# OrderCreatedConsumer listens to the "orders.created" queue and updates the
+# customer's order count when a new order is created.
 class OrderCreatedConsumer
   class << self
     # Starts the consumer and subscribes to the "orders.created" queue.
@@ -7,6 +11,8 @@ class OrderCreatedConsumer
         event_data = JSON.parse(body)
         handle_message(event_data)
         process_order_event(event_data)
+      rescue JSON::ParserError => e
+        Rails.logger.info "Failed to parse message: #{e.message}"
       end
     end
 
@@ -30,14 +36,12 @@ class OrderCreatedConsumer
     end
 
     def handle_message(event_data)
-      puts "New Message Received"
+      Rails.logger.info "New Message Received"
       process_event(event_data)
-    rescue JSON::ParserError => e
-      puts "Failed to parse message: #{e.message}"
     end
 
     def process_event(event_data)
-      puts "Processing event: #{event_data}"
+      Rails.logger.info "Processing event: #{event_data}"
     end
   end
 end

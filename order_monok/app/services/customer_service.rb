@@ -1,6 +1,10 @@
+# frozen_string_literal: true
+
 require "faraday"
 require "json"
 
+# Handles communication with the Customer Service API.
+# Fetches customer details and manages errors related to API requests.
 class CustomerService
   class CustomerNotFoundError < StandardError; end
   class ServiceError < StandardError; end

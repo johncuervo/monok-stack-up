@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Migration for creating the orders table with necessary fields and indexes.
 class CreateOrders < ActiveRecord::Migration[8.0]
   def change
     create_table :orders do |t|

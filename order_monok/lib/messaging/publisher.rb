@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Messaging
+  # Handles publishing messages to RabbitMQ, ensuring reliable message delivery.
   class Publisher
     class PublishError < StandardError; end
 
