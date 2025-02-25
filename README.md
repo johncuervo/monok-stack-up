@@ -113,6 +113,23 @@ docker exec -it order-monok bin/rubocop --parallel
 ## 🔗 Microservices Relationship
 
 ### 📌 General Architecture
+
+Event-Driven Architecture (EDA) is a design pattern where systems respond to events in real time instead of relying on direct communication between components. In this approach, services or components communicate by emitting and consuming events rather than making synchronous calls.
+
+1. Producers:
+- Generate and emit events when a change occurs in the system.
+- Example: An order service emits an "order.created" event when a new order is placed.
+
+2. Event Broker (Messaging Middleware):
+- The channel that transports events between producers and consumers.
+- Examples: Kafka, RabbitMQ, NATS, AWS EventBridge.
+
+3. Consumers:
+- Listen for specific events and react accordingly.
+- Example: A billing service consumes the "order.created" event to generate an invoice.
+
+![alt text](EDA.png)
+
 The **Customer** and **Order** services are decoupled and communicate via RabbitMQ events.
 
 1. **System creates an order** → Order Service receives the request.
@@ -125,18 +142,19 @@ The **Customer** and **Order** services are decoupled and communicate via Rabbit
 
 ```mermaid
 graph TD;
-    Client-->Order_Service;
-    Order_Service-->Customer_Service[Validate Customer];
-    Order_Service-->|Event orders.created| RabbitMQ;
-    RabbitMQ-->|Event consumed| Customer_Service[Update orders_count];
+    Client-->Order_Monok;
+    Order_Monok-->|Validate Customer| Customer_Monok;
+    Order_Monok-->|Event orders.created| RabbitMQ;
+    RabbitMQ-->|Event consumed| Customer_Monok;
 ```
 
 ---
 
-## 🏗️ Architecture and Event Flow
+## 🏗️ Advantages of EDA
 - **Decoupling**: Services do not depend directly on each other; they use events.
 - **Scalability**: More consumers can be added without affecting existing services.
 - **Resilience**: If a service fails, the event remains in RabbitMQ until reprocessed.
+- **Real-Time Processing**: Allows instant responses to events as they occur.
 
 ---
 
@@ -154,4 +172,3 @@ graph TD;
 | POST | `api/v1/orders` | Creates a new order |
 
 ---
-
