@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module Api
   module V1
+    # Controller for managing orders. Handles listing orders by customer and creating new orders.
     class OrdersController < ApplicationController
       def index
         orders = Order.by_customer(params[:customer_id])

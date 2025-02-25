@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 module Messaging
+  # Handles publishing messages to RabbitMQ, ensuring reliable message delivery.
   class Publisher
     class PublishError < StandardError; end
 
@@ -19,7 +22,7 @@ module Messaging
         content_type: "application/json"
       )
     ensure
-      channel&.close if channel&.open?
+      channel.close if channel.open?
     end
 
     private

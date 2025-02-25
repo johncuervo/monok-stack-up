@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 module Messaging
+  # ConsumerConnection establishes and manages the connection to RabbitMQ,
+  # allowing message consumption from a specified queue.
   class ConsumerConnection
     class ConsumptionError < StandardError; end
 

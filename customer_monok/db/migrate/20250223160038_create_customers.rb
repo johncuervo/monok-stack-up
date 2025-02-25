@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# Migration to create the customers table with required fields and a unique index on email.
 class CreateCustomers < ActiveRecord::Migration[8.0]
   def change
     create_table :customers do |t|

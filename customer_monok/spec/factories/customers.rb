@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :customer do
-    name { "MyString" }
-    address { "MyString" }
+    name { Faker::Name.name }
+    address { Faker::Address.full_address }
     orders_count { 1 }
-    email { "MyString" }
+    email { Faker::Internet.email }
   end
 end

@@ -1,0 +1,132 @@
+{
+	"info": {
+		"_postman_id": "dac363ae-4f3c-400a-9592-41afaecdf43a",
+		"name": "MonokStack",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8365707"
+	},
+	"item": [
+		{
+			"name": "Get a customer",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{customer_host}}/api/v1/customers/6",
+					"host": [
+						"{{customer_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get orders",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customer_id\": 3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{order_host}}/api/v1/orders",
+					"host": [
+						"{{order_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create order",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"customer_id\": 3, \n    \"product_name\": \"Iphone\", \n    \"quantity\": 5, \n    \"price\": 3000, \n    \"status\": \"completed\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{order_host}}/api/v1/orders",
+					"host": [
+						"{{order_host}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "customer_host",
+			"value": "localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "order_host",
+			"value": "localhost:3001",
+			"type": "string"
+		}
+	]
+}

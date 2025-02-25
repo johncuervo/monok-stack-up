@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'faker'
 
 # Clear the database before seeding
